@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.le.ScanCallback;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import java.io.IOException;
+import java.util.*;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -42,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     private List<BluetoothDevice> deviceList = new ArrayList<>();
     private RecyclerView recyclerView;
     private DeviceAdapter mAdapter;
+    private BluetoothServerSocket btskt;
+    private UUID uuid = UUID.fromString("FTPRINT");
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_FINE_LOCO = 2;
@@ -79,11 +86,19 @@ public class MainActivity extends AppCompatActivity
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
+
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCO);
 
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+        int counter = 0;
+        try {
+            btskt = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("No",uuid);
+            counter++;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -95,8 +110,8 @@ public class MainActivity extends AppCompatActivity
                 final BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
                     @Override
                     public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
-                        if(bluetoothDevice != null && bluetoothDevice.getName() != null) {
-                            if(!deviceList.contains(bluetoothDevice)) {
+                        if (bluetoothDevice != null && bluetoothDevice.getName() != null) {
+                            if (!deviceList.contains(bluetoothDevice)) {
                                 deviceList.add(bluetoothDevice);
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -110,8 +125,12 @@ public class MainActivity extends AppCompatActivity
                     }
                 }, SCAN_PERIOD);
                 mBluetoothAdapter.startLeScan(mLeScanCallback);
+
+
+
             }
         });
+
     }
 
     @Override
