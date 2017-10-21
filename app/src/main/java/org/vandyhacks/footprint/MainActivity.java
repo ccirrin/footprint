@@ -94,10 +94,14 @@ public class MainActivity extends AppCompatActivity
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+<<<<<<< HEAD
         /*int counter = 0;
+=======
+        int count = 0;
+>>>>>>> 7cd3ba455d5d4e8c419d72f9c93965ba72aceb0e
         try {
             btskt = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("No",uuid);
-            counter++;
+            count++;
         } catch (IOException e) {
             e.printStackTrace();
         }*/
