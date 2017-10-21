@@ -13,16 +13,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameBox;
     private Button usernameButton;
-    private BluetoothAdapter mBluetoothAdapter;
-    private final static int REQUEST_ENABLE_BT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
         setContentView(R.layout.activity_login);
         usernameBox = (EditText) findViewById(R.id.usernameBox);
         usernameButton = (Button) findViewById(R.id.usernameButton);
