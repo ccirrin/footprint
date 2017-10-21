@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private DeviceAdapter mAdapter;
     private BluetoothServerSocket btskt;
-    private UUID uuid = UUID.fromString("FTPRINT");
+    public static int counter = 0;
+   // private UUID uuid = UUID.fromString("FTPRINT");
 
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_FINE_LOCO = 2;
@@ -93,13 +94,13 @@ public class MainActivity extends AppCompatActivity
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
-        int counter = 0;
+        /*int counter = 0;
         try {
             btskt = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord("No",uuid);
             counter++;
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +189,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public static void incrementCounter() {
+        counter++;
+        System.out.println(counter);
     }
 
 

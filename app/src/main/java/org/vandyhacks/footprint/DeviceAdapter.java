@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,9 +41,17 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         BluetoothDevice btDevice = devicesList.get(position);
-        holder.name.setText(btDevice.getName());
+        holder.name.setText(btDevice.getName() + " - " + btDevice.getAddress());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.incrementCounter();
+                devicesList.remove(position);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
