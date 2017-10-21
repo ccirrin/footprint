@@ -1,5 +1,6 @@
 package org.vandyhacks.footprint;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -19,16 +20,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         usernameBox = (EditText) findViewById(R.id.usernameBox);
         usernameButton = (Button) findViewById(R.id.usernameButton);
-
-        /*usernameButton.setOnClickListener(new View.OnClickListener() {
+        usernameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("username", usernameBox.getText().toString());
                 startActivity(intent);
 
             }
-        });*/
+        });
 
     }
 }
