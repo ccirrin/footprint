@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
             public void onClick(View view) {
+                deviceList.clear();
                 final BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
                     @Override
                     public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
