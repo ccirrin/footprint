@@ -1,7 +1,11 @@
 package org.vandyhacks.footprint;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,7 +22,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private BluetoothAdapter mBluetoothAdapter;
+    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
     private final static int REQUEST_ENABLE_BT = 1;
 
@@ -33,10 +37,24 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Howdy", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
+        if (mBluetoothAdapter == null){
+
+        }
+
+        if (!mBluetoothAdapter.isEnabled()){
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        Intent discoverableIntent =
+                    new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE, 0);
+        startActivity(discoverableIntent);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -51,6 +69,27 @@ public class MainActivity extends AppCompatActivity
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReciever, filter);
+
+    }
+
+    private final BroadcastReceiver mReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent receiverIntent) {
+            String action = receiverIntent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice device = receiverIntent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress();
+            }
+        }
+    };
+
+    protected void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(mReciever);
     }
 
     @Override
